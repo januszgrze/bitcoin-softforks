@@ -42,13 +42,6 @@ export default function Home() {
 
     return (
         <div className="mx-auto space-y-8 pt-8">
-            {/* Opcode Chart */}
-            {isClient && (
-                <div className="mb-8 max-w-5xl mx-auto">
-                    <OpcodeChart />
-                </div>
-            )}
-            
             {/* Opcode Table */}
             <div className="lg:flex mb-4 justify-center w-full lg:max-w-5xl mx-auto">
                 <OpcodeTable
@@ -60,6 +53,13 @@ export default function Home() {
                     isOpcode
                 />
             </div>
+            
+            {/* Opcode Chart */}
+            {isClient && (
+                <div className="mb-8 max-w-5xl mx-auto">
+                    <OpcodeChart />
+                </div>
+            )}
             
             {/* CTA section */}
             {isClient && <CtaCardOpcode />}

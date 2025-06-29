@@ -89,7 +89,7 @@ export default function Navbar() {
                     />
                 </div> */}
                 <h1 className="font-playfair italic font-black text-brand text-5xl text-center">
-                    Bitcoin Layers
+                    Bitcoin Softforks
                 </h1>
             </Link>
             <div className="flex items-center">
@@ -127,7 +127,7 @@ export default function Navbar() {
                             onClick={closeMenu}
                             className="hover:underline"
                         >
-                            Opcodes
+                            Soft forks
                         </Link>
                     </li>
                     <li className="hidden lg:block">
@@ -136,7 +136,7 @@ export default function Navbar() {
                             onClick={closeMenu}
                             className="hover:underline"
                         >
-                            Analytics
+                            About
                         </Link>
                     </li>
                     <li className="hidden lg:block">
@@ -145,7 +145,7 @@ export default function Navbar() {
                             onClick={closeMenu}
                             className="hover:underline"
                         >
-                            Glossary
+                            Documentation
                         </Link>
                     </li>
                     <li className="hidden lg:block">
@@ -155,7 +155,7 @@ export default function Navbar() {
                             onClick={closeMenu}
                             className="flex items-center space-x-1.5 hover:underline"
                         >
-                            <div>Research</div>
+                            <div>Contribute</div>
                             <ExternalLinkIcon className="size-3" />
                         </Link>
                     </li>
@@ -186,7 +186,7 @@ export default function Navbar() {
                                                 className="hover:underline"
                                                 onClick={closeSheet}
                                             >
-                                                Opcodes
+                                                Soft forks
                                             </Link>
                                         </li>
                                         <li>
@@ -195,7 +195,7 @@ export default function Navbar() {
                                                 onClick={closeSheet}
                                                 className="hover:underline"
                                             >
-                                                Analytics
+                                                About
                                             </Link>
                                         </li>
                                         <li>
@@ -204,7 +204,7 @@ export default function Navbar() {
                                                 onClick={closeSheet}
                                                 className="hover:underline"
                                             >
-                                                Glossary
+                                                Documentation
                                             </Link>
                                         </li>
                                         <li>
@@ -214,7 +214,7 @@ export default function Navbar() {
                                                 className="flex space-x-2 items-center hover:underline"
                                                 onClick={closeSheet}
                                             >
-                                                <div>Research</div>
+                                                <div>Contribute</div>
                                                 <ExternalLinkIcon className="size-3" />
                                             </Link>
                                         </li>

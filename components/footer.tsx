@@ -52,7 +52,7 @@ const FooterBottom = () => (
         <div className="lg:h-6 px-4 flex flex-col justify-start items-start gap-16 w-full max-w-5xl">
             <div className="w-full flex lg:flex-row flex-col-reverse lg:justify-between items-center gap-y-3">
                 <div className="text-muted-foreground text-base font-normal leading-normal">
-                    Bitcoin Layers {new Date().getFullYear()} • MIT license
+                    Bitcoin Softforks {new Date().getFullYear()} • MIT license
                 </div>
                 <div className="flex justify-start items-center gap-2">
                     <Link
@@ -103,7 +103,7 @@ export default function Footer() {
                                     <div className="w-8 h-8 rounded-[21.33px] flex">
                                         <Image
                                             src="/bitcoinlayers-without-background-logo.svg"
-                                            alt="Bitcoin Layers Logo"
+                                            alt="Bitcoin Softforks Logo"
                                             width={32}
                                             height={32}
                                         />

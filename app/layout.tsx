@@ -9,8 +9,8 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-    title: "Bitcoin Layers",
-    description: "Documenting Bitcoin Layers",
+      title: "Bitcoin Softforks",
+  description: "Documenting Bitcoin Softforks",
 };
 
 interface RootLayoutProps {
