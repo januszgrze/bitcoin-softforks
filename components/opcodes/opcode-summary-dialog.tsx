@@ -6,54 +6,19 @@ import { InfrastructureProject } from "@/content/props";
 import Image from "next/image";
 import { parseTextWithLinks } from "@/util/parseTextWithLinks";
 
-interface SummaryContent {
-    title?: string;
-    content: string;
-}
-
 interface OpcodeSummaryDialogProps {
     opcode: InfrastructureProject;
-    summary: SummaryContent[];
 }
 
-// Hardcoded summary content for opcodes
-const OPCODE_SUMMARIES: Record<string, SummaryContent[]> = {
-    "opcat": [
-        {
-            title: "Key Functionality",
-            content: "OP_CAT concatenates two data elements on the stack, enabling recursive covenants and advanced smart contract patterns on Bitcoin."
-        },
-        {
-            title: "Primary Use Cases", 
-            content: "Enables STARK proof verification in Bitcoin Script, supports bridging protocols, and allows for more sophisticated covenant constructions."
-        },
-        {
-            title: "Developer Interest",
-            content: "High community support with 23 developers preferring this opcode according to recent surveys. Strong backing from L2 teams."
-        }
-    ],
-    "opctv": [
-        {
-            title: "Key Functionality",
-            content: "OP_CTV (CheckTemplateVerify) enables covenant functionality by committing to specific transaction outputs, allowing pre-signed transaction trees."
-        },
-        {
-            title: "Primary Use Cases",
-            content: "Supports payment pools, congestion control, vault constructions, and various Layer 2 protocols through covenant mechanisms."
-        },
-        {
-            title: "Developer Interest", 
-            content: "Strong developer support with 20 developers preferring this opcode. Well-established BIP with clear technical specifications."
-        }
-    ]
-};
-
-const OpcodeSummaryDialog: React.FC<OpcodeSummaryDialogProps> = ({ opcode, summary }) => {
-    // Don't show button if no summary content
-    if (!summary || summary.length === 0) {
+const OpcodeSummaryDialog: React.FC<OpcodeSummaryDialogProps> = ({ opcode }) => {
+    // Find the applications section from the opcode's sections
+    const applicationsSection = opcode.sections?.find(section => section.id === "applications");
+    
+    // Don't show button if no applications content
+    if (!applicationsSection || !applicationsSection.content || applicationsSection.content.length === 0) {
         return (
             <div className="text-muted-foreground text-sm">
-                No summary
+                No applications
             </div>
         );
     }
@@ -105,9 +70,9 @@ const OpcodeSummaryDialog: React.FC<OpcodeSummaryDialogProps> = ({ opcode, summa
                         {/* Underline separator */}
                         <hr className="border-border" />
                         
-                        {/* Summary Content */}
+                        {/* Applications Content */}
                         <div className="content flex-grow pt-0">
-                            {summary.map((item, index) => (
+                            {applicationsSection.content.map((item, index) => (
                                 <div key={index} className="self-stretch mb-4">
                                     {item.title && (
                                         <div className="text-lg font-semibold text-foreground mb-2">
@@ -127,5 +92,4 @@ const OpcodeSummaryDialog: React.FC<OpcodeSummaryDialogProps> = ({ opcode, summa
     );
 };
 
-export { OPCODE_SUMMARIES };
 export default OpcodeSummaryDialog; 

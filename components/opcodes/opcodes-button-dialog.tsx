@@ -5,24 +5,20 @@ import { HashIcon } from "lucide-react";
 import { InfrastructureProject } from "@/content/props";
 import Image from "next/image";
 import { parseTextWithLinks } from "@/util/parseTextWithLinks";
-import { OPCODE_SUMMARIES } from "./opcode-summary-dialog";
-
-interface SummaryContent {
-    title?: string;
-    content: string;
-}
 
 interface OpcodesButtonDialogProps {
     opcode: InfrastructureProject;
-    summary: SummaryContent[];
 }
 
-const OpcodesButtonDialog: React.FC<OpcodesButtonDialogProps> = ({ opcode, summary }) => {
-    // Don't show button if no summary content
-    if (!summary || summary.length === 0) {
+const OpcodesButtonDialog: React.FC<OpcodesButtonDialogProps> = ({ opcode }) => {
+    // Find the Components section from the opcode's sections
+    const componentsSection = opcode.sections?.find(section => section.id === "Components");
+    
+    // Don't show button if no components content
+    if (!componentsSection || !componentsSection.content || componentsSection.content.length === 0) {
         return (
             <div className="text-muted-foreground text-sm">
-                No opcode data
+                No component data
             </div>
         );
     }
@@ -74,9 +70,9 @@ const OpcodesButtonDialog: React.FC<OpcodesButtonDialogProps> = ({ opcode, summa
                         {/* Underline separator */}
                         <hr className="border-border" />
                         
-                        {/* Summary Content */}
+                        {/* Components Content */}
                         <div className="content flex-grow pt-0">
-                            {summary.map((item, index) => (
+                            {componentsSection.content.map((item, index) => (
                                 <div key={index} className="self-stretch mb-4">
                                     {item.title && (
                                         <div className="text-lg font-semibold text-foreground mb-2">

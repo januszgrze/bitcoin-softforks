@@ -29,15 +29,10 @@ export default function Home() {
 
     const opcodeHeaders = [
         { name: "Name", showSorting: true, mobileLabel: "Name" },
-        {
-            name: "Type",
-            showSorting: true,
-            mobileLabel: "Type",
-            filterOptions: opcodeTypeFilters,
-        },
         { name: "Components", showSorting: true, mobileLabel: "Components" },
         { name: "Primitives", showSorting: true, mobileLabel: "Primitives" },
         { name: "Tech Analysis", showSorting: true, mobileLabel: "Tech Analysis" },
+        { name: "Applications", showSorting: true, mobileLabel: "Applications" },
         {
             name: "Associated Networks",
             showSorting: true,

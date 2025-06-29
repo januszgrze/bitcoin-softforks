@@ -17,11 +17,10 @@ import {
 import { CoinsIcon } from "lucide-react";
 import NetworkTypeHoverCard from "../layer/network-type-hover-card";
 import ImageWithFallback from "./image-with-fallback";
-import OpcodeSummaryDialog, { OPCODE_SUMMARIES } from "../opcodes/opcode-summary-dialog";
-import ApplicationsSummaryDialog, { OPCODE_APPLICATIONS } from "../opcodes/applications-summary-dialog";
+import OpcodeSummaryDialog from "../opcodes/opcode-summary-dialog";
+import ApplicationsSummaryDialog from "../opcodes/applications-summary-dialog";
 import OpcodesButtonDialog from "../opcodes/opcodes-button-dialog";
-import TechAnalysisDialog, { TECH_ANALYSIS } from "../opcodes/tech-analysis-dialog";
-import type { NetworkInfo } from "./support-networks-modal";
+import TechAnalysisDialog from "../opcodes/tech-analysis-dialog";
 import SupportNetworksModal from "./support-networks-modal";
 import starknet from "@/content/layers/starknet";
 import base from "@/content/layers/base";
@@ -43,7 +42,6 @@ type TableTabKey =
     | "Tech Analysis"
     | "Applications"
     | "Support Networks"
-    | "Purpose";
 
 interface Props {
     data: InfrastructureProject[];
@@ -134,11 +132,7 @@ const SupportNetworksList = () => {
 
 const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false }: Props) => {
     const [status, setStatus] = useQueryState("status", { defaultValue: "all" });
-    const [types] = useQueryState<string[]>("type", {
-        defaultValue: [],
-        parse: (value) => value.split(",").filter(Boolean),
-        serialize: (value) => value.join(","),
-    });
+
     const [sortBy, setSortBy] = useQueryState("sortBy", { defaultValue: "Name" });
     const [sortOrder, setSortOrder] = useQueryState("sortOrder", { defaultValue: "asc" });
     const [mobileActiveTab, setMobileActiveTab] = useState<TableTabKey>("Components");
@@ -159,22 +153,22 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
                     valueB = b.title.toLowerCase();
                     break;
                 case "Components":
-                    valueA = OPCODE_SUMMARIES[a.slug] ? 1 : 0;
-                    valueB = OPCODE_SUMMARIES[b.slug] ? 1 : 0;
+                    valueA = a.sections?.find(s => s.id === "Components")?.content?.length || 0;
+                    valueB = b.sections?.find(s => s.id === "Components")?.content?.length || 0;
                     break;
                 case "Primitives":
-                    valueA = OPCODE_APPLICATIONS[a.slug] ? 1 : 0;
-                    valueB = OPCODE_APPLICATIONS[b.slug] ? 1 : 0;
+                    valueA = a.sections?.find(s => s.id === "Primitive")?.content?.length || 0;
+                    valueB = b.sections?.find(s => s.id === "Primitive")?.content?.length || 0;
                     break;
                 case "Tech Analysis":
-                    valueA = TECH_ANALYSIS[a.slug] ? 1 : 0;
-                    valueB = TECH_ANALYSIS[b.slug] ? 1 : 0;
+                    valueA = a.sections?.find(s => s.id === "Techanalysis")?.content?.length || 0;
+                    valueB = b.sections?.find(s => s.id === "Techanalysis")?.content?.length || 0;
                     break;
                 case "Applications":
-                    valueA = OPCODE_SUMMARIES[a.slug] ? 1 : 0;
-                    valueB = OPCODE_SUMMARIES[b.slug] ? 1 : 0;
+                    valueA = a.sections?.find(s => s.id === "applications")?.content?.length || 0;
+                    valueB = b.sections?.find(s => s.id === "applications")?.content?.length || 0;
                     break;
-                case "Support Networks":
+                case "Associated Networks":
                     valueA = OPCODE_SUPPORT_NETWORKS[a.slug]?.length || 0;
                     valueB = OPCODE_SUPPORT_NETWORKS[b.slug]?.length || 0;
                     break;
@@ -187,9 +181,6 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
         });
 
         let filtered = sorted;
-        if (types.length) {
-            filtered = filtered.filter(item => types.includes(item.entityType));
-        }
         if (status !== "all") {
             filtered = filtered.filter(item => {
                 switch (status) {
@@ -201,7 +192,7 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
             });
         }
         return filtered;
-    }, [data, sortBy, sortOrder, types, status]);
+    }, [data, sortBy, sortOrder, status]);
 
     const handleSort = (header: string) => {
         if (sortBy === header) {
@@ -267,35 +258,19 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
                                     </td>
                                                                         {/* Components */}
                                     <td className="px-4 py-3">
-                                        {OPCODE_SUMMARIES[item.slug] ? (
-                                            <OpcodesButtonDialog opcode={item} summary={OPCODE_SUMMARIES[item.slug]} />
-                                        ) : (
-                                            <span className="text-muted-foreground text-sm">No component data</span>
-                                        )}
+                                        <OpcodesButtonDialog opcode={item} />
                                     </td>
                                     {/* Primitives */}
                                     <td className="px-4 py-3">
-                                        {OPCODE_APPLICATIONS[item.slug] ? (
-                                            <ApplicationsSummaryDialog opcode={item} applications={OPCODE_APPLICATIONS[item.slug]} />
-                                        ) : (
-                                            <span className="text-muted-foreground text-sm">No primitives</span>
-                                        )}
+                                        <ApplicationsSummaryDialog opcode={item} />
                                     </td>
                                     {/* Tech Analysis */}
                                     <td className="px-4 py-3">
-                                        {TECH_ANALYSIS[item.slug] ? (
-                                            <TechAnalysisDialog opcode={item} analysis={TECH_ANALYSIS[item.slug]} />
-                                        ) : (
-                                            <span className="text-muted-foreground text-sm">No tech analysis</span>
-                                        )}
+                                        <TechAnalysisDialog opcode={item} />
                                     </td>
                                     {/* Applications */}
                                     <td className="px-4 py-3">
-                                        {OPCODE_SUMMARIES[item.slug] ? (
-                                            <OpcodeSummaryDialog opcode={item} summary={OPCODE_SUMMARIES[item.slug]} />
-                                        ) : (
-                                            <span className="text-muted-foreground text-sm">No summary</span>
-                                        )}
+                                        <OpcodeSummaryDialog opcode={item} />
                                     </td>
                                     {/* Support Networks */}
                                     <td className="px-4 py-3">

@@ -6,38 +6,19 @@ import { InfrastructureProject } from "@/content/props";
 import Image from "next/image";
 import { parseTextWithLinks } from "@/util/parseTextWithLinks";
 
-interface TechAnalysisContent {
-    title?: string;
-    content: string;
-}
-
 interface TechAnalysisDialogProps {
     opcode: InfrastructureProject;
-    analysis: TechAnalysisContent[];
 }
 
-// Hardcoded tech analysis content for opcodes
-export const TECH_ANALYSIS: Record<string, TechAnalysisContent[]> = {
-    "opcat": [
-        {
-            title: "Technical Analysis",
-            content: ""
-        }
-    ],
-    "opctv": [
-        {
-            title: "Technical Analysis",
-            content: ""
-        }
-    ]
-};
-
-const TechAnalysisDialog: React.FC<TechAnalysisDialogProps> = ({ opcode, analysis }) => {
-    // Don't show button if no analysis content
-    if (!analysis || analysis.length === 0) {
+const TechAnalysisDialog: React.FC<TechAnalysisDialogProps> = ({ opcode }) => {
+    // Find the Techanalysis section from the opcode's sections
+    const techSection = opcode.sections?.find(section => section.id === "Techanalysis");
+    
+    // Don't show button if no tech analysis content
+    if (!techSection || !techSection.content || techSection.content.length === 0) {
         return (
             <div className="text-muted-foreground text-sm">
-                No analysis
+                No tech analysis
             </div>
         );
     }
@@ -89,9 +70,9 @@ const TechAnalysisDialog: React.FC<TechAnalysisDialogProps> = ({ opcode, analysi
                         {/* Underline separator */}
                         <hr className="border-border" />
                         
-                        {/* Analysis Content */}
+                        {/* Tech Analysis Content */}
                         <div className="content flex-grow pt-0">
-                            {analysis.map((item, index) => (
+                            {techSection.content.map((item, index) => (
                                 <div key={index} className="self-stretch mb-4">
                                     {item.title && (
                                         <div className="text-lg font-semibold text-foreground mb-2">
