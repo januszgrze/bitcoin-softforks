@@ -131,7 +131,7 @@ const SupportNetworksList = () => {
 };
 
 const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false }: Props) => {
-    const [status, setStatus] = useQueryState("status", { defaultValue: "all" });
+    const [status, setStatus] = useQueryState("status", { defaultValue: "softforks" });
 
     const [sortBy, setSortBy] = useQueryState("sortBy", { defaultValue: "Name" });
     const [sortOrder, setSortOrder] = useQueryState("sortOrder", { defaultValue: "asc" });
@@ -181,15 +181,19 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
         });
 
         let filtered = sorted;
-        if (status !== "all") {
+        if (status !== "softforks") {
             filtered = filtered.filter(item => {
                 switch (status) {
-                    case "proposed": return item.live === "Proposed";
-                    case "bip":      return item.live === "Bip Drafted";
-                    case "activation": return item.live === "Activation Client";
+                    case "usecases": return item.entityType === EntityType.UseCase;
+                    case "softforks": return item.entityType === EntityType.SingleOp || item.entityType === EntityType.GroupOp;
                     default: return true;
                 }
             });
+        } else {
+            // For "softforks", show SingleOp and GroupOp
+            filtered = filtered.filter(item => 
+                item.entityType === EntityType.SingleOp || item.entityType === EntityType.GroupOp
+            );
         }
         return filtered;
     }, [data, sortBy, sortOrder, status]);
@@ -214,9 +218,8 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
                 </div>
                 <div className="flex">
                     {[
-                        { key: "activation", label: "Act. Client", count: data.filter(d => d.live === "Activation Client").length },
-                        { key: "bip", label: "Proposed", count: data.filter(d => d.live === "Proposed").length },
-                        { key: "all", label: "All", count: data.length },
+                        { key: "usecases", label: "Usecases", count: data.filter(d => d.entityType === EntityType.UseCase).length },
+                        { key: "softforks", label: "Soft Forks", count: data.filter(d => d.entityType === EntityType.SingleOp || d.entityType === EntityType.GroupOp).length },
                     ].map((statusOption) => (
                         <button
                             key={statusOption.key}
