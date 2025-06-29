@@ -119,23 +119,8 @@ export default function Footer() {
                                     <SectionHeader>Reviews</SectionHeader>
                                     <div className="self-stretch lg:h-[188px] flex flex-col justify-start items-start gap-3">
                                         <SectionItem href="/">
-                                            Networks
-                                        </SectionItem>
-                                        {/* <SectionItem href="/?view=staking">
-                                            Staking
-                                        </SectionItem> */}
-                                        <SectionItem href="/?view=wrappers">
-                                            Wrappers
-                                        </SectionItem>
-                                        <SectionItem href="/more">
-                                            Apps & more
-                                        </SectionItem>
-                                        <SectionItem href="/opcode">
                                             Opcodes
                                         </SectionItem>
-                                        {/* <SectionItem href="/bitcoinonly">
-                                            Bitcoin Only
-                                        </SectionItem> */}
                                     </div>
                                 </div>
                                 <div className="grow flex flex-col justify-start items-start gap-4">

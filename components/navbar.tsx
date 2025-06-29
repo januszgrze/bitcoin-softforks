@@ -127,7 +127,7 @@ export default function Navbar() {
                             onClick={closeMenu}
                             className="hover:underline"
                         >
-                            Reviews
+                            Opcodes
                         </Link>
                     </li>
                     <li className="hidden lg:block">
@@ -186,7 +186,7 @@ export default function Navbar() {
                                                 className="hover:underline"
                                                 onClick={closeSheet}
                                             >
-                                                Reviews
+                                                Opcodes
                                             </Link>
                                         </li>
                                         <li>

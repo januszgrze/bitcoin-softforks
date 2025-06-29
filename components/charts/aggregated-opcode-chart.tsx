@@ -28,118 +28,13 @@ import { ChartContainer } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { TrendingUpIcon, UsersIcon, BarChart3Icon } from "lucide-react";
+import { scoreTypes, slugToOpcode, opcodeData } from "@/data/opcode-preference-data";
 
 type AggregatedOpcodeChartProps = {
   defaultOpcode?: string;
   title?: string;
   description?: string;
   chartHeight?: string;
-};
-
-const scoreTypes = [
-  { key: "Prefer", color: "#16a34a", label: "Strongly Support", icon: "🟢" },
-  { key: "Acceptable", color: "#65a30d", label: "Acceptable", icon: "🟡" },
-  { key: "Wanting", color: "#ea580c", label: "Needs Work", icon: "🟠" },
-  { key: "Weak", color: "#dc2626", label: "Weak Support", icon: "🔴" },
-  { key: "Evaluating", color: "#0891b2", label: "Under Review", icon: "🔵" },
-  { key: "No", color: "#7c2d12", label: "Oppose", icon: "⚫" },
-  { key: "Deficient", color: "#64748b", label: "Insufficient", icon: "⚪" },
-];
-
-const slugToOpcode: Record<string, string> = {
-  opcat: "OP_CAT",
-  opctv: "OP_CTV",
-  opccv: "OP_CCV",
-  opcsfs: "OP_CSFS",
-  oppaircommit: "OP_PAIRCOMMIT",
-  opinternalkey: "OP_INTERNALKEY",
-  opvault: "OP_VAULT",
-  optxhash: "OP_TXHASH",
-  sighash_apo: "SIGHASH_APO",
-};
-
-const opcodeData: Record<string, { score: string; count: number }[]> = {
-  OP_CAT: [
-    { score: "Prefer", count: 23 },
-    { score: "Acceptable", count: 4 },
-    { score: "Weak", count: 3 },
-    { score: "Wanting", count: 4 },
-    { score: "Evaluating", count: 5 },
-    { score: "No", count: 1 },
-    { score: "Deficient", count: 1 },
-  ],
-  OP_CTV: [
-    { score: "Prefer", count: 20 },
-    { score: "Acceptable", count: 2 },
-    { score: "Weak", count: 2 },
-    { score: "Wanting", count: 2 },
-    { score: "Evaluating", count: 7 },
-    { score: "No", count: 3 },
-    { score: "Deficient", count: 2 },
-  ],
-  OP_PAIRCOMMIT: [
-    { score: "Prefer", count: 4 },
-    { score: "Acceptable", count: 1 },
-    { score: "Weak", count: 1 },
-    { score: "Wanting", count: 2 },
-    { score: "Evaluating", count: 27 },
-    { score: "No", count: 4 },
-    { score: "Deficient", count: 2 },
-  ],
-  OP_CSFS: [
-    { score: "Prefer", count: 13 },
-    { score: "Acceptable", count: 9 },
-    { score: "Weak", count: 3 },
-    { score: "Wanting", count: 3 },
-    { score: "Evaluating", count: 7 },
-    { score: "No", count: 3 },
-    { score: "Deficient", count: 0 },
-  ],
-  OP_CCV: [
-    { score: "Prefer", count: 5 },
-    { score: "Acceptable", count: 1 },
-    { score: "Weak", count: 3 },
-    { score: "Wanting", count: 3 },
-    { score: "Evaluating", count: 24 },
-    { score: "No", count: 0 },
-    { score: "Deficient", count: 2 },
-  ],
-  OP_INTERNALKEY: [
-    { score: "Prefer", count: 11 },
-    { score: "Acceptable", count: 8 },
-    { score: "Weak", count: 2 },
-    { score: "Wanting", count: 5 },
-    { score: "Evaluating", count: 11 },
-    { score: "No", count: 1 },
-    { score: "Deficient", count: 1 },
-  ],
-  OP_VAULT: [
-    { score: "Prefer", count: 13 },
-    { score: "Acceptable", count: 6 },
-    { score: "Weak", count: 1 },
-    { score: "Wanting", count: 8 },
-    { score: "Evaluating", count: 7 },
-    { score: "No", count: 2 },
-    { score: "Deficient", count: 1 },
-  ],
-  OP_TXHASH: [
-    { score: "Prefer", count: 11 },
-    { score: "Acceptable", count: 5 },
-    { score: "Weak", count: 5 },
-    { score: "Wanting", count: 6 },
-    { score: "Evaluating", count: 8 },
-    { score: "No", count: 2 },
-    { score: "Deficient", count: 3 },
-  ],
-  SIGHASH_APO: [
-    { score: "Prefer", count: 8 },
-    { score: "Acceptable", count: 3 },
-    { score: "Weak", count: 5 },
-    { score: "Wanting", count: 6 },
-    { score: "Evaluating", count: 13 },
-    { score: "No", count: 4 },
-    { score: "Deficient", count: 1 },
-  ],
 };
 
   // Custom tick component for text truncation
@@ -371,7 +266,7 @@ export default function OpcodeSupportChart({
                 <SelectValue placeholder="Select opcode" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL_PREFER" className="font-medium">@🔍 All Opcodes Overview</SelectItem>
+                <SelectItem value="ALL_PREFER" className="font-medium">All Opcodes Overview</SelectItem>
                 {Object.keys(opcodeData)
                   .sort((a, b) => {
                     const aPrefer = opcodeData[a]?.find(s => s.score === "Prefer")?.count || 0;
