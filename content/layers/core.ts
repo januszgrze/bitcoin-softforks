@@ -12,13 +12,13 @@ import {
     ContentSection,
     RiskCategory,
     TokenSnippet,
+    AtlSnippet,
     ReviewSnippet,
     BitcoinSecuritySnippet,
     TechnologySnippet,
     UseCaseSnippet,
     RiskSummarySnippet,
 } from "../props";
-import bitcoinos from "../infrastructures/bitcoinos";
 
 const core: LayerProject = {
     type: Type.Layer,

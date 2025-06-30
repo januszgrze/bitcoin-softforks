@@ -169,6 +169,10 @@ const entityTypeDefinitions: Record<EntityType, { name: string; description: str
         name: "Natively Staked BTC",
         description: "Bitcoin that is natively staked to secure a network or protocol."
     },
+    [EntityType.UseCase]: {
+        name: "Use Case",
+        description: "A specific application or functionality enabled by Bitcoin opcodes or soft fork proposals."
+    },
     [EntityType["-"]]: {
         name: "Not Applicable",
         description: "This classification does not apply to the current context."
