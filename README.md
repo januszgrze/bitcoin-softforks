@@ -1,6 +1,6 @@
 # Bitcoin Soft Forks UI
 
-This is a website skin for the bitcoin.softforks.org project. It is forked from the Bitcoin Layers website. 
+This is a website skin for the bitcoin.softforks.org project. It is forked from the Bitcoin Layers website. To view the full site, please run locally.
 
 # Running Bitcoin Soft forks Locally
 
