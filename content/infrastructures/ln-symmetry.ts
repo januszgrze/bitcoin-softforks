@@ -4,6 +4,7 @@ import {
     PrimitivesTitles,
     UseCasesTitles, 
     UseCaseContent,
+    SoftForkTitles
 } from "../opcode-props";
 import { Scripts } from "../opcode-script-props";
 import {
@@ -55,46 +56,18 @@ const lnSymmetry: InfrastructureProject = {
         "OP_CAT is an opcode that was removed from bitcoin script. It's been proposed to be re-added into script. Its key feature is that it concatenates two data elements.",
     sections: [
         {
-            id: "Components",
-            title: "Components",
+            id: "Softforks",
+            title: "Soft Forks",
             content: [
                  {
-                    title: ComponentTitles.OP_CAT,
-                    content: ComponentTitles.OP_CAT,
+                    title: SoftForkTitles.C3PO,
+                    content: SoftForkTitles.C3PO,
                  },
             ],
         },
         {
-            id: "Primitive",
-            title: "Primitives",
-            content: [
-                 {
-                    title: PrimitivesTitles.ConcatenateTwoStrings,
-                    content: PrimitivesTitles.ConcatenateTwoStrings,
-                 },
-                 {
-                    title: PrimitivesTitles.VectorCommitments,
-                    content: PrimitivesTitles.VectorCommitments,
-                 },
-                 {
-                    title: PrimitivesTitles.CommitToTwoStrings,
-                    content: PrimitivesTitles.CommitToTwoStrings,
-                 },
-            ],
-        },
-        {
-            id: "applications",
-            title: "Applications",
-            content: [
-                {
-                    title: "Placeholder text",
-                    content: "Placeholder text",
-                 },
-            ],
-        },
-        {
-            id: "Techanalysis",
-            title: "Tech Analysis",
+            id: "throughputmultiple",
+            title: "Throughput Multiple",
             content: [
                  {
                     title: "Placeholder text",
@@ -103,23 +76,12 @@ const lnSymmetry: InfrastructureProject = {
             ],
         },
         {
-            id: "script-functionality",
-            title: "Script Functionality",
+            id: "associatednetworks",
+            title: "Associated Networks",
             content: [
                 {
-                    title: "Example SNARK verifier",
-                    content: Scripts.STARKVERIFIERCAT,
-                },
-            ],
-        },
-        {
-            id: "stakeholderresources",
-            title: "Stakeholder Resources",
-            content: [
-                {
-                    title: "Learn how OP_CAT impacts you",
-                    content:
-                        "Each softfork proposal impacts different stakeholders differently. Check out the resources below to learn this proposal would impact you.",
+                    title: "The following networks would leverage this use case",
+                    content: "starknet, base, optimism, bob, scroll, taiko, zksync",
                 },
             ],
         },

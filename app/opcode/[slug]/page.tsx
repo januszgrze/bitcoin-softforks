@@ -10,6 +10,7 @@ import RiskAnalysis from "@/components/layer/risk-analysis/infra-container";
 import OpcodeOverview from "@/components/opcodes/opcodeOverview";
 import UnderDevelopmentBanner from "@/components/opcodes/underdevelopmentbanner";
 import OpcodeSupportChart from "@/components/charts/aggregated-opcode-chart";
+import ProjectAssociatedNetworks from "@/components/project-associated-networks";
 
 async function getInfrastructureFromSlug(slug: string) {
     const infrastructure = allOpcodes.find(
@@ -69,6 +70,7 @@ export default async function InfrastructurePage(props: {
                                 infrastructure={infrastructure}
                             />
                         )}
+                        <ProjectAssociatedNetworks opcode={infrastructure} />
                         <OpcodeBody infrastructure={infrastructure} />
                     </div>
                 </div>

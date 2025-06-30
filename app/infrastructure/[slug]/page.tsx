@@ -13,6 +13,7 @@ import RiskSummary from "@/components/shared/risk-summary";
 import UnderDevelopmentBanner from "@/components/under-development-banner";
 import ProjectContractAddresses from "@/components/project-contract-addresses";
 import ManualContractAddresses from "@/components/manual-contract-addresses";
+import ProjectAssociatedNetworks from "@/components/project-associated-networks";
 
 async function getInfrastructureFromSlug(slug: string) {
     const infrastructure = allInfrastructures.find(
@@ -77,6 +78,7 @@ export default async function InfrastructurePage(props: {
                             sectionTitle="Additional Contracts"
                             sectionId="manualcontracts"
                         />
+                        <ProjectAssociatedNetworks opcode={infrastructure} />
                         <InfrastructureBody infrastructure={infrastructure} />
                     </div>
                 </div>

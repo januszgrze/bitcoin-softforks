@@ -3,9 +3,9 @@ import { BitcoinIcon, HandCoinsIcon, Pickaxe, Code } from "lucide-react";
 
 export default function InfoCardGridOpcode() {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <InfoCardOpcode
-                title="Economic nodes"
+                title="Node runners"
                 subtitle="Review how proposals"
                 description="affect your business"
                 href="https://github.com/sCrypt-Inc/awesome-op-cat"
@@ -26,14 +26,6 @@ export default function InfoCardGridOpcode() {
                 href="https://github.com/sCrypt-Inc/awesome-op-cat"
                 isExternal
                 icon={Code}
-            />
-            <InfoCardOpcode
-                title="Users"
-                subtitle="Review how proposals"
-                description="provide different use cases"
-                href="https://github.com/sCrypt-Inc/awesome-op-cat"
-                isExternal
-                icon={BitcoinIcon}
             />
         </div>
     );

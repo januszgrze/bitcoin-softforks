@@ -3,6 +3,11 @@
 // =============================================================================
 
 // Primitives
+export enum SoftForkTitles {
+    C3PO = "C3PO",
+}
+
+// Primitives
 export enum PrimitivesTitles {
     Build_The_CTV_Template_Hash_From_The_Stack = "Build The CTV Template Hash From The Stack",
     CommitToTwoStrings = "Commit To Two Strings",

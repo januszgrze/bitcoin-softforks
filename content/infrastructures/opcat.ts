@@ -113,6 +113,16 @@ const opcat: InfrastructureProject = {
             ],
         },
         {
+            id: "associatednetworks",
+            title: "Associated Networks",
+            content: [
+                {
+                    title: "The following networks would leverage this use case",
+                    content: "starknet, base, optimism, bob, scroll, taiko, zksync",
+                },
+            ],
+        },
+        {
             id: "stakeholderresources",
             title: "Stakeholder Resources",
             content: [

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import OpcodeChart from "@/components/charts/opcode-chart";
 import CtaCardOpcode from "@/components/cta-card-opcodes";
 import OpcodeTable from "@/components/tables/opcode-table";
+import InfoCardGridOpcode from "@/components/info-card-grid-opcode";
 import { allOpcodes } from "@/util/opcode_index";
 import { GitForkIcon } from "lucide-react";
 
@@ -52,6 +53,11 @@ export default function Home() {
                     icon={<GitForkIcon className="mr-3" />}
                     isOpcode
                 />
+            </div>
+            
+            {/* Info Cards */}
+            <div className="mb-8 max-w-5xl mx-auto">
+                <InfoCardGridOpcode />
             </div>
             
             {/* Opcode Chart */}

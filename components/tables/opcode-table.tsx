@@ -21,6 +21,8 @@ import OpcodeSummaryDialog from "../opcodes/opcode-summary-dialog";
 import ApplicationsSummaryDialog from "../opcodes/applications-summary-dialog";
 import OpcodesButtonDialog from "../opcodes/opcodes-button-dialog";
 import TechAnalysisDialog from "../opcodes/tech-analysis-dialog";
+import SoftForksDialog from "../opcodes/softforks-dialog";
+import ThroughputMultipleDialog from "../opcodes/throughput-multiple-dialog";
 import SupportNetworksModal from "./support-networks-modal";
 import starknet from "@/content/layers/starknet";
 import base from "@/content/layers/base";
@@ -42,6 +44,8 @@ type TableTabKey =
     | "Tech Analysis"
     | "Applications"
     | "Support Networks"
+    | "Soft Forks"
+    | "Throughput Multiple"
 
 interface Props {
     data: InfrastructureProject[];
@@ -101,10 +105,51 @@ const getAltRollupNetworks = () => {
         }));
 };
 
-const SupportNetworksList = () => {
-    const networks = getAltRollupNetworks();
+const SupportNetworksList = ({ opcode }: { opcode: InfrastructureProject }) => {
+    // Find the associatednetworks section from the opcode's sections
+    const associatedSection = opcode.sections?.find(section => section.id === "associatednetworks");
+    
+    // Extract network names from the content
+    const getNetworksFromContent = () => {
+        if (!associatedSection || !associatedSection.content || associatedSection.content.length === 0) {
+            return [];
+        }
+        
+        // Get all content strings and parse network names
+        const networkNames: string[] = [];
+        associatedSection.content.forEach(item => {
+            if (item.content) {
+                // Split by comma and clean up the network names
+                const names = item.content.split(',').map(name => 
+                    name.trim().toLowerCase().replace(/\s+/g, '')
+                ).filter(name => name.length > 0);
+                networkNames.push(...names);
+            }
+        });
+        
+        // Map to the full network data structure
+        const allNetworks = getAltRollupNetworks();
+        return allNetworks.filter(network => 
+            networkNames.some(name => 
+                network.slug.toLowerCase().includes(name) || 
+                network.title.toLowerCase().includes(name) ||
+                name.includes(network.slug.toLowerCase())
+            )
+        );
+    };
+
+    const networks = getNetworksFromContent();
     const topThree = networks.slice(0, 3);
     const remainingCount = networks.length - 3;
+
+    // If no networks found, show fallback
+    if (networks.length === 0) {
+        return (
+            <div className="text-muted-foreground text-sm">
+                No networks
+            </div>
+        );
+    }
 
     return (
         <SupportNetworksModal networks={networks}>
@@ -135,13 +180,25 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
 
     const [sortBy, setSortBy] = useQueryState("sortBy", { defaultValue: "Name" });
     const [sortOrder, setSortOrder] = useQueryState("sortOrder", { defaultValue: "asc" });
-    const [mobileActiveTab, setMobileActiveTab] = useState<TableTabKey>("Components");
+    const [mobileActiveTab, setMobileActiveTab] = useState<TableTabKey>(
+        status === "usecases" ? "Soft Forks" : "Components"
+    );
 
-    const fullHeaders = headers;
+    // Different headers based on current status
+    const usecaseHeaders = [
+        { name: "Use Case", showSorting: true, mobileLabel: "Use Case" },
+        { name: "Soft Forks", showSorting: false, mobileLabel: "Soft Forks" },
+        { name: "Throughput Multiple", showSorting: false, mobileLabel: "Throughput Multiple" },
+        { name: "Associated Networks", showSorting: false, mobileLabel: "Associated Networks" },
+    ];
+
+    const softforkHeaders = headers; // Use the original headers for soft forks
+
+    const fullHeaders = status === "usecases" ? usecaseHeaders : softforkHeaders;
 
     // Only show Name + active tab on mobile
     const mobileTableHeaders = fullHeaders.filter(
-        (h) => h.name === mobileActiveTab || h.name === "Name"
+        (h) => h.name === mobileActiveTab || h.name === "Name" || h.name === "Use Case"
     );
 
     const sortAndFilterData = useMemo(() => {
@@ -149,6 +206,7 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
             let valueA: any, valueB: any;
             switch (sortBy) {
                 case "Name":
+                case "Use Case":
                     valueA = a.title.toLowerCase();
                     valueB = b.title.toLowerCase();
                     break;
@@ -167,6 +225,14 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
                 case "Applications":
                     valueA = a.sections?.find(s => s.id === "applications")?.content?.length || 0;
                     valueB = b.sections?.find(s => s.id === "applications")?.content?.length || 0;
+                    break;
+                case "Soft Forks":
+                    valueA = a.sections?.find(s => s.id === "Softforks")?.content?.length || 0;
+                    valueB = b.sections?.find(s => s.id === "Softforks")?.content?.length || 0;
+                    break;
+                case "Throughput Multiple":
+                    valueA = a.sections?.find(s => s.id === "throughputmultiple")?.content?.length || 0;
+                    valueB = b.sections?.find(s => s.id === "throughputmultiple")?.content?.length || 0;
                     break;
                 case "Associated Networks":
                     valueA = OPCODE_SUPPORT_NETWORKS[a.slug]?.length || 0;
@@ -249,36 +315,67 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
                         <tbody>
                             {sortAndFilterData.map((item, idx) => (
                                 <tr key={item.slug} className={idx < sortAndFilterData.length - 1 ? "border-b" : ""}>
-                                    {/* Name */}
-                                    <td className="px-4 py-4 font-semibold whitespace-nowrap">
-                                        <div className="flex items-center space-x-2 max-w-[250px]">
-                                            <Link href={`/${isOpcode ? "opcode" : "infrastructure"}/${item.slug}`} className="flex items-center min-w-0 flex-1">
-                                                <OpcodeImage src={`/logos/${item.slug}.png`} title={item.title} />
-                                                <span className="ml-2 truncate">{item.title}</span>
-                                            </Link>
-                                            {item.notice && <div className="w-2 h-2 bg-orange-400 rounded-full" />}    
-                                        </div>
-                                    </td>
-                                                                        {/* Components */}
-                                    <td className="px-4 py-3">
-                                        <OpcodesButtonDialog opcode={item} />
-                                    </td>
-                                    {/* Primitives */}
-                                    <td className="px-4 py-3">
-                                        <ApplicationsSummaryDialog opcode={item} />
-                                    </td>
-                                    {/* Tech Analysis */}
-                                    <td className="px-4 py-3">
-                                        <TechAnalysisDialog opcode={item} />
-                                    </td>
-                                    {/* Applications */}
-                                    <td className="px-4 py-3">
-                                        <OpcodeSummaryDialog opcode={item} />
-                                    </td>
-                                    {/* Support Networks */}
-                                    <td className="px-4 py-3">
-                                        <SupportNetworksList />
-                                    </td>
+                                    {status === "usecases" ? (
+                                        // Usecases view
+                                        <>
+                                            {/* Use Case */}
+                                            <td className="px-4 py-4 font-semibold whitespace-nowrap">
+                                                <div className="flex items-center space-x-2 max-w-[250px]">
+                                                    <Link href={`/${isOpcode ? "opcode" : "infrastructure"}/${item.slug}`} className="flex items-center min-w-0 flex-1">
+                                                        <OpcodeImage src={`/logos/${item.slug}.png`} title={item.title} />
+                                                        <span className="ml-2 truncate">{item.title}</span>
+                                                    </Link>
+                                                    {item.notice && <div className="w-2 h-2 bg-orange-400 rounded-full" />}    
+                                                </div>
+                                            </td>
+                                            {/* Soft Forks */}
+                                            <td className="px-4 py-3">
+                                                <SoftForksDialog opcode={item} />
+                                            </td>
+                                            {/* Throughput Multiple */}
+                                            <td className="px-4 py-3">
+                                                <ThroughputMultipleDialog opcode={item} />
+                                            </td>
+                                            {/* Associated Networks */}
+                                            <td className="px-4 py-3">
+                                                <SupportNetworksList opcode={item} />
+                                            </td>
+                                        </>
+                                    ) : (
+                                        // Soft Forks view (original)
+                                        <>
+                                            {/* Name */}
+                                            <td className="px-4 py-4 font-semibold whitespace-nowrap">
+                                                <div className="flex items-center space-x-2 max-w-[250px]">
+                                                    <Link href={`/${isOpcode ? "opcode" : "infrastructure"}/${item.slug}`} className="flex items-center min-w-0 flex-1">
+                                                        <OpcodeImage src={`/logos/${item.slug}.png`} title={item.title} />
+                                                        <span className="ml-2 truncate">{item.title}</span>
+                                                    </Link>
+                                                    {item.notice && <div className="w-2 h-2 bg-orange-400 rounded-full" />}    
+                                                </div>
+                                            </td>
+                                            {/* Components */}
+                                            <td className="px-4 py-3">
+                                                <OpcodesButtonDialog opcode={item} />
+                                            </td>
+                                            {/* Primitives */}
+                                            <td className="px-4 py-3">
+                                                <ApplicationsSummaryDialog opcode={item} />
+                                            </td>
+                                            {/* Tech Analysis */}
+                                            <td className="px-4 py-3">
+                                                <TechAnalysisDialog opcode={item} />
+                                            </td>
+                                            {/* Applications */}
+                                            <td className="px-4 py-3">
+                                                <OpcodeSummaryDialog opcode={item} />
+                                            </td>
+                                            {/* Support Networks */}
+                                            <td className="px-4 py-3">
+                                                <SupportNetworksList opcode={item} />
+                                            </td>
+                                        </>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>
