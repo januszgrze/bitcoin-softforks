@@ -7,7 +7,6 @@ export default function OpcodeChart() {
         <AggregatedOpcodeChart
             title="Proposed opcodes"
             description="See what developers prefer for a possible bitcoin soft fork"
-            chartHeight="h-64"
         />
     );
 }
