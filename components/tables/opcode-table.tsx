@@ -3,7 +3,7 @@
 import React, { useState, useMemo, ReactNode } from "react";
 import Image from "next/image";
 import TableHeader from "@/components/tables/tableHeader";
-import { isMobile } from "react-device-detect";
+// Removed isMobile import to fix hydration issues
 import Link from "next/link";
 import { useQueryState } from "nuqs";
 import { InfrastructureProject, EntityType, LayerProject } from "@/content/props";
@@ -54,6 +54,7 @@ interface Props {
         showSorting: boolean;
         filterOptions?: string[];
         mobileLabel: string;
+        className?: string;
     }[];
     title?: string;
     description?: string;
@@ -180,26 +181,27 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
 
     const [sortBy, setSortBy] = useQueryState("sortBy", { defaultValue: "Name" });
     const [sortOrder, setSortOrder] = useQueryState("sortOrder", { defaultValue: "asc" });
-    const [mobileActiveTab, setMobileActiveTab] = useState<TableTabKey>(
-        status === "usecases" ? "Soft Forks" : "Components"
-    );
+
 
     // Different headers based on current status
     const usecaseHeaders = [
         { name: "Use Case", showSorting: true, mobileLabel: "Use Case" },
         { name: "Soft Forks", showSorting: false, mobileLabel: "Soft Forks" },
-        { name: "Throughput Multiple", showSorting: false, mobileLabel: "Throughput Multiple" },
-        { name: "Associated Networks", showSorting: false, mobileLabel: "Associated Networks" },
+        { name: "Throughput Multiple", showSorting: false, mobileLabel: "Throughput Multiple", className: "hidden md:table-cell" },
+        { name: "Associated Networks", showSorting: false, mobileLabel: "Associated Networks", className: "hidden md:table-cell" },
     ];
 
-    const softforkHeaders = headers; // Use the original headers for soft forks
+    const softforkHeaders = headers.map((header, index) => {
+        // Hide all columns except Name and Components on mobile for soft forks view
+        if (index > 1) {
+            return { ...header, className: "hidden md:table-cell" };
+        }
+        return header;
+    });
 
     const fullHeaders = status === "usecases" ? usecaseHeaders : softforkHeaders;
 
-    // Only show Name + active tab on mobile
-    const mobileTableHeaders = fullHeaders.filter(
-        (h) => h.name === mobileActiveTab || h.name === "Name" || h.name === "Use Case"
-    );
+    // Headers are now handled via CSS responsive classes
 
     const sortAndFilterData = useMemo(() => {
         const sorted = [...data].sort((a, b) => {
@@ -307,7 +309,7 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm text-left">
                         <TableHeader
-                            headers={isMobile ? mobileTableHeaders : fullHeaders}
+                            headers={fullHeaders}
                             onSort={handleSort}
                             sortBy={sortBy}
                             sortOrder={sortOrder}
@@ -333,11 +335,11 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
                                                 <SoftForksDialog opcode={item} />
                                             </td>
                                             {/* Throughput Multiple */}
-                                            <td className="px-4 py-3">
+                                            <td className="px-4 py-3 hidden md:table-cell">
                                                 <ThroughputMultipleDialog opcode={item} />
                                             </td>
                                             {/* Associated Networks */}
-                                            <td className="px-4 py-3">
+                                            <td className="px-4 py-3 hidden md:table-cell">
                                                 <SupportNetworksList opcode={item} />
                                             </td>
                                         </>
@@ -359,19 +361,19 @@ const OpcodeTable = ({ data, headers, title, description, icon, isOpcode = false
                                                 <OpcodesButtonDialog opcode={item} />
                                             </td>
                                             {/* Primitives */}
-                                            <td className="px-4 py-3">
+                                            <td className="px-4 py-3 hidden md:table-cell">
                                                 <ApplicationsSummaryDialog opcode={item} />
                                             </td>
                                             {/* Tech Analysis */}
-                                            <td className="px-4 py-3">
+                                            <td className="px-4 py-3 hidden md:table-cell">
                                                 <TechAnalysisDialog opcode={item} />
                                             </td>
                                             {/* Applications */}
-                                            <td className="px-4 py-3">
+                                            <td className="px-4 py-3 hidden md:table-cell">
                                                 <OpcodeSummaryDialog opcode={item} />
                                             </td>
                                             {/* Support Networks */}
-                                            <td className="px-4 py-3">
+                                            <td className="px-4 py-3 hidden md:table-cell">
                                                 <SupportNetworksList opcode={item} />
                                             </td>
                                         </>

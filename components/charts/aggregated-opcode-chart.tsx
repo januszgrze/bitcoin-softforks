@@ -135,7 +135,7 @@ const StatsBar = ({
   const useCasesCount = getSectionCount(currentProject, "applications");
   
   return (
-    <div className="grid grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <div 
         className={`bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800 cursor-pointer transition-all hover:shadow-md ${
           selectedSection === "Components" ? "ring-2 ring-blue-500 shadow-lg" : ""
@@ -390,7 +390,7 @@ export default function OpcodeSupportChart({
   };
 
   return (
-    <Card className="bg-background shadow-lg border-0 ring-1 ring-gray-200/50 dark:ring-gray-800/50" id="op-support-chart">
+    <Card className="bg-background" id="op-support-chart">
       <CardHeader className="pb-2">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-1">

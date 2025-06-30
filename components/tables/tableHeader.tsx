@@ -18,6 +18,7 @@ interface TableHeaderProps {
         filterOptions?: string[];
         showSorting?: boolean;
         filterQueryParam?: string;
+        className?: string;
     }[];
     onSort: (header: string) => void;
     sortBy?: string;
@@ -55,7 +56,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
                 {headers.map((header, index) => (
                     <th
                         key={index}
-                        className={`lg:pl-6 lg:py-6 pl-4 py-2 font-medium border-t border-border last:pr-4 `}
+                        className={`lg:pl-6 lg:py-6 pl-4 py-2 font-medium border-t border-border last:pr-4 ${header.className || ''}`}
                     >
                         <div className="flex items-center justify-between">
                             <div className="flex items-center grow">
