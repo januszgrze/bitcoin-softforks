@@ -5,6 +5,7 @@ import OpcodeChart from "@/components/charts/opcode-chart";
 import CtaCardOpcode from "@/components/cta-card-opcodes";
 import OpcodeTable from "@/components/tables/opcode-table";
 import InfoCardGridOpcode from "@/components/info-card-grid-opcode";
+import WelcomeBanner from "@/components/welcome-banner";
 import { allOpcodes } from "@/util/opcode_index";
 import { GitForkIcon } from "lucide-react";
 
@@ -43,6 +44,18 @@ export default function Home() {
 
     return (
         <div className="mx-auto space-y-8 pt-8">
+            {/* Welcome Banner */}
+            <div className="max-w-5xl mx-auto">
+                <WelcomeBanner />
+            </div>
+            
+            {/* Opcode Chart */}
+            {isClient && (
+                <div className="mb-8 max-w-5xl mx-auto">
+                    <OpcodeChart />
+                </div>
+            )}
+            
             {/* Opcode Table */}
             <div className="lg:flex mb-4 justify-center w-full lg:max-w-5xl mx-auto">
                 <OpcodeTable
@@ -59,13 +72,6 @@ export default function Home() {
             <div className="mb-8 max-w-5xl mx-auto">
                 <InfoCardGridOpcode />
             </div>
-            
-            {/* Opcode Chart */}
-            {isClient && (
-                <div className="mb-8 max-w-5xl mx-auto">
-                    <OpcodeChart />
-                </div>
-            )}
             
             {/* CTA section */}
             {isClient && <CtaCardOpcode />}
